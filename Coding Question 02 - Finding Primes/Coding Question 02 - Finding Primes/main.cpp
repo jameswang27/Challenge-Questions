@@ -30,26 +30,19 @@ bool isPrime(int num, vector<long>& primes);
 int main()
 {
 	vector<long> data;
-	assert(!isPrime(1, data));
-	assert(!isPrime(4, data));
-	assert(isPrime(2, data));
-	assert(isPrime(37, data));
-	data.clear();
-	
+
 	int count = 1;
-	while(data.size() <= 10001) //Have this second number be the prime that you want to find.
+	//Find up to the 10001th prime number
+	while(data.size() < 10001) //Have this second number be the prime that you want to find + 1. The nth prime number is in the n-1th spot in the vector.
 	{
 		isPrime(count, data);
 		count++;
 	}
 
-	for (size_t i = 0; i < data.size(); i++)
-	{
-		cout << data[i] << '\t';
-		if (i % 5 == 4) cout << endl;
-	}
-
-	cout << endl;
+	//Print the prime numbers that we found
+	cout << "The 3rd prime number is: " << data[2] << endl;
+	cout << "The 58th prime number is: " << data[57] << endl;
+	cout << "The 10001st prime number is: " << data[10000] << endl;
 	cout << "Finished" << endl;
 }
 
@@ -69,14 +62,18 @@ bool isPrime(int num, vector<long>& primes)
 		primes.push_back(num);
 		return true;
 	}
-	if (num % 2 == 0) return false;	//If the number is divisible by 2 we can immediately return false, 2 is the only prime even number
+	//if (num % 2 == 0) return false;	//If the number is divisible by 2 we can immediately return false, 2 is the only prime even number
 	int last = floor(sqrt(num));	//This is the last int we need to check as a divisor. It should contain the floor of the sqrt of num.
 
 	//Begin at 3 because we definitely don't need to check 1, and we've already checked 2
 	//Because we checked 2, we no longer need to check potential even divisors because those would in turn be divisible by 2
 	for (size_t i = 0; i < primes.size(); i++)
 	{
-		//if (primes[i] > last) return false;
+		if (primes[i] > last)
+		{
+			primes.push_back(num);
+			return true;
+		}
 		if (num % primes[i] == 0) return false;
 	}
 	primes.push_back(num);
